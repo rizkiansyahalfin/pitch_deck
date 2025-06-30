@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Inventaris Pondok Pesantren - Pitch Deck</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .presentation {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+        
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            padding: 2rem;
+            position: relative;
+            background: white;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow-y: auto;
+        }
+        
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            width: 100%;
+        }
+        
+        .slide h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .slide h2 {
+            font-size: 2.5rem;
+            color: #2d3748;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .slide h3 {
+            font-size: 1.8rem;
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #666;
+            font-weight: 400;
+            text-align: center;
+        }
+        
+        .author-info {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .author-info p {
+            margin: 0.5rem 0;
+            color: #4a5568;
+            font-weight: 500;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .card h4 {
+            font-size: 1.4rem;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .bullet-list li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        
+        .bullet-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .checkmark-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checkmark-list li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 2rem;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        
+        .checkmark-list li::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+        
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255,255,255,0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .role-section {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .role-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .role-header h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature-card h5 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.3rem 0;
+            color: #4a5568;
+            font-size: 0.95rem;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+        
+        .feature-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .tech-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto 0;
+        }
+        
+        .contact-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+        
+        .contact-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .impact-note {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+            color: #7f1d1d;
+            font-weight: 500;
+        }
+        
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .roadmap-item {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid #0ea5e9;
+            text-align: center;
+        }
+        
+        .roadmap-item h5 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0c4a6e;
+            margin-bottom: 0.5rem;
+        }
+        
+        .roadmap-item p {
+            color: #075985;
+            font-size: 0.9rem;
+        }
+
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1000px;
+            margin: 2rem auto 0;
+        }
+
+        .conclusion-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            border-left: 4px solid #16a34a;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .conclusion-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .conclusion-card h4 {
+            font-size: 1.3rem;
+            color: #166534;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .conclusion-card p {
+            color: #15803d;
+            line-height: 1.6;
+        }
+
+        .demo-note {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .demo-note p {
+            color: #92400e;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .slide {
+                padding: 1rem;
+            }
+            
+            .slide h1 {
+                font-size: 2rem;
+            }
+            
+            .slide h2 {
+                font-size: 1.8rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .role-header h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">9</span>
+        </div>
+        
+        <!-- Slide 1: Judul & Identitas -->
+        <div class="slide active">
+            <div class="slide-header">
+                <h1>Aplikasi Inventaris Pondok Pesantren</h1>
+                <p class="subtitle">Solusi Digital untuk Manajemen Aset Pesantren</p>
+                <div class="author-info">
+                    <p>👤 <strong>Rizkiansyah Alfin</strong></p>
+                    <p>📅 <strong>Ujian Proyek Akhir Laravel – 2025</strong></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 2: Permasalahan -->
+        <div class="slide">
+            <h2>Permasalahan yang Sering Terjadi di Pondok</h2>
+            <div class="content-grid">
+                <div class="card">
+                    <h4><span class="card-icon"></span>Pencatatan Manual</h4>
+                    <ul class="bullet-list">
+                        <li>Barang tidak tercatat dengan baik</li>
+                        <li>Pencatatan manual rawan hilang dan human error</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4><span class="card-icon"></span>Pelacakan Aset</h4>
+                    <ul class="bullet-list">
+                        <li>Sulit melacak barang masuk dan keluar</li>
+                        <li>Peminjaman barang tidak terdokumentasi</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="impact-note">
+                📌 <strong>Dampaknya:</strong> tidak efisien, rawan kehilangan aset, dan sulit evaluasi
+            </div>
+        </div>
+        
+        <!-- Slide 3: Solusi -->
+        <div class="slide">
+            <h2>Inventaris Pondok Pesantren</h2>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h3>Aplikasi berbasis web yang mempermudah:</h3>
+            </div>
+            <div class="content-grid">
+                <div class="card">
+                    <ul class="checkmark-list">
+                        <li>Pencatatan barang dan kategori</li>
+                        <li>Peminjaman dan pengembalian barang</li>
+                        <li>Manajemen user sesuai peran (role)</li>
+                        <li>Monitoring stok dan histori transaksi</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Role Admin, Petugas, User Gabungan -->
+        <div class="slide">
+            <h2>Sistem Role-Based Access</h2>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h3>🔐 Tiga Level Akses Pengguna:</h3>
+            </div>
+            
+            <!-- Admin Role -->
+            <div class="role-section" style="margin-bottom: 3rem;">
+                <div class="role-header">
+                    <h3>👨‍💻 ADMIN (Administrator)</h3>
+                    <p>Kontrol penuh sistem dengan fitur manajemen lengkap</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h5>📊 Dashboard & Analytics</h5>
+                        <ul class="feature-list">
+                            <li>Statistik lengkap sistem</li>
+                            <li>Grafik peminjaman per bulan</li>
+                            <li>Grafik barang per kategori</li>
+                            <li>Stok barang kritis</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h5>👥 User Management</h5>
+                        <ul class="feature-list">
+                            <li>CRUD user lengkap</li>
+                            <li>Reset password & role update</li>
+                            <li>Bulk operations</li>
+                            <li>Activity logs</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h5>📂 Master Data</h5>
+                        <ul class="feature-list">
+                            <li>Category & Location Management</li>
+                            <li>System Configuration</li>
+                            <li>Backup & Restore</li>
+                            <li>Comprehensive Reporting</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Petugas Role -->
+            <div class="role-section" style="margin-bottom: 3rem;">
+                <div class="role-header">
+                    <h3>👨‍💼 PETUGAS (Staff)</h3>
+                    <p>Operasional harian dan manajemen inventaris</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h5>📦 Item Management</h5>
+                        <ul class="feature-list">
+                            <li>CRUD barang & stok</li>
+                            <li>Upload gambar & QR code</li>
+                            <li>Maintenance scheduling</li>
+                            <li>Stock opname</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h5>✅ Approval System</h5>
+                        <ul class="feature-list">
+                            <li>Approve/reject peminjaman</li>
+                            <li>Manage perpanjangan</li>
+                            <li>Update status & kondisi</li>
+                            <li>Basic reporting</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User Role -->
+            <div class="role-section">
+                <div class="role-header">
+                    <h3>👤 USER (Pengguna Biasa)</h3>
+                    <p>Akses peminjaman dan manajemen pribadi</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h5>📚 Catalog & Borrowing</h5>
+                        <ul class="feature-list">
+                            <li>Browse katalog barang</li>
+                            <li>Request peminjaman</li>
+                            <li>Track status & history</li>
+                            <li>Bookmark system</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h5>⭐ Personal Features</h5>
+                        <ul class="feature-list">
+                            <li>Feedback system</li>
+                            <li>Request barang baru</li>
+                            <li>Real-time notifications</li>
+                            <li>Profile management</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 5: Tampilan Aplikasi -->
+        <div class="slide">
+            <h2>Tampilan Aplikasi</h2>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h3>💻 Antarmuka Modern & Responsif:</h3>
+            </div>
+            <div class="content-grid">
+                <div class="card">
+                    <h4><span class="card-icon"></span>Interface Utama</h4>
+                    <ul class="bullet-list">
+                        <li>Dashboard: Ringkasan data real-time</li>
+                        <li>Tabel barang dan kategori interaktif</li>
+                        <li>Form peminjaman dan pengembalian</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4><span class="card-icon"></span>Fitur Manajemen</h4>
+                    <ul class="bullet-list">
+                        <li>Halaman user management</li>
+                        <li>Riwayat peminjaman lengkap</li>
+                        <li>Desain responsif dan minimalis</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="font-size: 1.2rem; color: #667eea; font-weight: 600;">
+                    ✨ Desain menggunakan Tailwind CSS, responsif dan user-friendly
+                </p>
+            </div>
+        </div>
+        
+        <!-- Slide 6: Teknologi -->
+        <div class="slide">
+            <h2>Teknologi yang Digunakan</h2>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h3>🔧 Modern Tech Stack:</h3>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-item">Laravel<br><small>(Backend Framework)</small></div>
+                <div class="tech-item">Tailwind CSS<br><small>(Frontend Framework)</small></div>
+                <div class="tech-item">MySQL<br><small>(Database Relasional)</small></div>
+                <div class="tech-item">Git & GitHub<br><small>(Version Control)</small></div>
+                <div class="tech-item">Render/Vercel<br><small>(Deployment)</small></div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="font-size: 1.2rem; color: #667eea; font-weight: 600;">
+                    ✅ Mengikuti arsitektur MVC & RESTful API
+                </p>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Keunggulan -->
+        <div class="slide">
+            <h2>Keunggulan Aplikasi</h2>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h3>🌟 Apa yang Membuat Aplikasi Ini Unggul?</h3>
+            </div>
+            <div class="content-grid">
+                <div class="card">
+                    <h4><span class="card-icon"></span>Desain & UX</h4>
+                    <ul class="bullet-list">
+                        <li>Desain bersih dan modern</li>
+                        <li>Praktis dan mudah digunakan</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4><span class="card-icon"></span>Sistem & Teknologi</h4>
+                    <ul class="bullet-list">
+                        <li>Akses berbasis peran (role-based)</li>
+                        <li>Real-time update data</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4><span class="card-icon"></span>Skalabilitas</h4>
+                    <ul class="bullet-list">
+                        <li>Siap dikembangkan menjadi aplikasi mobile</li>
+                        <li>Cocok diterapkan di berbagai pesantren</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Roadmap -->
+        <div class="slide">
+            <h2>Roadmap Pengembangan</h2>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h3>📈 Pengembangan Selanjutnya:</h3>
+            </div>
+            <div class="roadmap-grid">
+                <div class="roadmap-item">
+                    <h5>📱 QR Code Scan</h5>
+                    <p>untuk input barang</p>
+                </div>
+                <div class="roadmap-item">
+                    <h5>🔔 Smart Notification</h5>
+                    <p>stok habis atau rusak</p>
+                </div>
+                <div class="roadmap-item">
+                    <h5>📊 Advanced Dashboard</h5>
+                    <p>statistik penggunaan barang</p>
+                </div>
+                <div class="roadmap-item">
+                    <h5>📄 Export Data</h5>
+                    <p>laporan PDF/Excel</p>
+                </div>
+                <div class="roadmap-item">
+                    <h5>📱 Mobile App</h5>
+                    <p>Flutter atau React Native</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="font-size: 1.2rem; color: #667eea; font-weight: 600;">
+                    🎯 Tujuan: aplikasi siap digunakan secara luas di berbagai pondok
+                </p>
+            </div>
+        </div>
+        
+        <!-- Slide 9: Penutup -->
+        <div class="slide">
+            <h2>Kesimpulan</h2>
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h3>🎯 Aplikasi Inventaris Pondok Pesantren dirancang untuk:</h3>
+            </div>
+            <div class="conclusion-grid">
+                <div class="conclusion-card">
+                    <h4>✅ Mengatasi Masalah</h4>
+                    <p>Mengatasi masalah pencatatan aset yang tidak efisien dan rawan kehilangan</p>
+                </div>
+                <div class="conclusion-card">
+                    <h4>✅ Mempermudah Pengelolaan</h4>
+                    <p>Mempermudah pengelolaan barang dengan sistem digital yang terintegrasi</p>
+                </div>
+                <div class="conclusion-card">
+                    <h4>✅ Meningkatkan Efisiensi</h4>
+                    <p>Meningkatkan efisiensi administrasi pondok dengan automasi proses</p>
+                </div>
+            </div>
+            <div class="demo-note">
+                <p>🚀 Saya siap mendemokan aplikasinya dan menerima masukan untuk pengembangan lebih lanjut!</p>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Sebelumnya</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Selanjutnya →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('totalSlides').textContent = totalSlides;
+        
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            
+            document.getElementById('currentSlide').textContent = index + 1;
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+        }
+        
+        function changeSlide(direction) {
+            const newIndex = currentSlideIndex + direction;
+            if (newIndex >= 0 && newIndex < totalSlides) {
+                currentSlideIndex = newIndex;
+                showSlide(currentSlideIndex);
+            }
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+        
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
